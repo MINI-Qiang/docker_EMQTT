@@ -21,12 +21,12 @@ RUN apt-get update
 ############################################
 
 #系统变量，安装的服务器版本信息
-ENV EMQTTD_VERSION=emqttd-ubuntu64-1.1.2-beta-20160630
+ENV EMQTTD_VERSION=emqttd
 
 #添加启动脚本,配置文件
 COPY start.sh /home/start.sh
-
-COPY conf/ /home/conf/
+COPY emqttd.zip /home/emqttd.zip
+COPY etc/ /home/etc/
 
 
 #部署环境工具
@@ -34,16 +34,16 @@ RUN apt-get install -y unzip \
 	&& apt-get install -y wget
 	
 RUN cd /home \
-	&& wget http://emqtt.com/static/brokers/${EMQTTD_VERSION}.zip \
 	&& unzip ${EMQTTD_VERSION}.zip \
 	&& rm -rf /var/lib/apt/lists/*
 
 RUN cd /home/emqttd/ \
 	&& cp /home/start.sh /home/emqttd/start.sh \
 	&& chmod 755 /home/emqttd/start.sh \
-	&& cp -Rf /home/conf/* /home/emqttd/ \ 
+#复制预配置文件到程序目录下	
+	&& cp -Rf /home/etc/* /home/emqttd/etc/ \ 
 #清理残留文件
-	&& rm -rf /home/conf/ \     
+	&& rm -rf /home/etc/ \     
 	&& rm -rf /home/start.sh
 	
 
@@ -55,7 +55,7 @@ CMD ["/home/emqttd/start.sh"]
 WORKDIR /home/emqttd
 
 #定义映射目录
-#VOLUME ["/home/emqttd/etc/", "/home/emqttd/data/", "/home/emqttd/plugins/"]
+#VOLUME ["/home/emqttd/"]
 
 # emqttd will occupy 1883 port for MQTT, 8883 port for MQTT(SSL), 8083 for WebSocket/HTTP, 18083 for dashboard
 EXPOSE 1883 8883 8083 18083
