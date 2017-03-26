@@ -35,7 +35,7 @@ docker image rm miniqiang/emqtt
 
 
 构建mysql
-docker run --name mysql -p 3306:3306 -v /home/chenglei/docker/mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=534659123 -d mysql:latest
+docker run --name mysql -p 3306:3306 -v /home/docker/mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=534659123 -d mysql:latest
 
 # 调试经验， 注意docker的mysql的配置文件，默认的user passwd都是被注释掉的。。在docker下 主机名称写链接的名称 mysql
 
